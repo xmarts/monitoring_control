@@ -9,7 +9,7 @@
                 <field name="monitoring_control" />
             </xpath>
         </field>
-    </record> -->
+    </record> 
     <record id="monitoring_add_fields_stock_operation" model="ir.ui.view">
         <field name="name">monitoring_add_fields_stock_operation</field>
         <field name="model">stock.picking</field>
@@ -41,21 +41,109 @@
                   <field name="cedis" attrs="{'required':[('tipo_reg','=','entrada')]}"/>
                 </group>
               </group>
-                <!--<group>
-                  <group>
-                    <field name="nombre_chofer" />
-                    <field name="placas_caja" />
-                    <field name="placas_tractor" />
-                  </group>
-                  <group>
-                    <field name="hora_llegada" />
-                    <field name="hora_ingreso" />
-                    <field name="condiciones_trans" />
-                  </group>
-                </group>-->
             </xpath>
         </field>
-    </record>
+    </record>-->
+    <record    id="view_form_monitoring_control" model="ir.ui.view">
+                <field name="name">Accesos Form</field>
+                <field name="model">monitoring.control</field>
+                <field name="arch" type="xml">
+                    <form>
+                        <header>
+                          <button string='Confirmar' name="action_confirm_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
+                          <button string='Cabiar a borrador' name="action_draft_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','confirmada')]}" />
+                          <field name="state" widget="statusbar"/>
+                        </header>
+                        <sheet string="Control de acceso">
+                          <div class="oe_button_box" name="button_box">
+                          </div>
+                          <div class="oe_title">
+                              <h1>
+                                  <field name="name" readonly="1"/>
+                              </h1>
+                          </div>
+                          <group>
+                            <group>
+                              <field name="tipo_reg" attrs="{'readonly':[('state','=','confirmada')]}" />
+                              <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}" />
+                            </group>
+                            <group>
+                              <field name="hora_llegada" attrs="{'readonly':[('state','=','confirmada')]}" />
+                              <field name="hora_ingreso" attrs="{'readonly':[('state','=','confirmada')]}" />
+                            </group>
+                          </group>
+                            <notebook>
+                                <page name="transporte" string="Datos del transporte">
+                                  <group name="datos_transporte">
+                                    <group>
+                                    <field name="tipo_trans" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                    <field name="placas_tractor" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                    <field name="placas_caja" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                    <field name="placas_caja_dos" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                  </group>
+                                  <group>
+                                    <field name="condiciones_trans" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                    <field name="proveedor_linea" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                  </group>
+                                  </group>
+                                </page>
+                                <page name="chofer" string="Datos del chofer" >
+                                  <group name="datos_chofer">
+                                    <group>
+                                      <field name="nombre_chofer" attrs="{'readonly':[('state','=','confirmada')]}"/>
+                                      <field name="tipo_licencia" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                      <field name="licencia" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                    </group>
+                                    <group>
+                                      <field name="origen" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                      <field name="destino" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                      <field name="cedis" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                    </group>
+                                  </group>
+                                </page>
+                                <!--
+                                <page string="Lineas">
+                                  <field name="purchase_lines" >
+                                       <tree string="Líneas de pedido de compra" editable="bottom">
+                                          <field name="product_id" />
+                                          <field name="name"/>
+                                          <field name="product_qty"/>
+                                          <field name="qty_received" />
+                                          <field name="qty_invoiced" />
+                                          <field name="product_uom" />
+                                      </tree>
+                                  </field>
+                                </page>
+                                -->
+                            </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                        </div>
+                    </form>
+                </field>
+            </record>
+            <record id="view_tree_monitoring_control" model="ir.ui.view">
+                <field name="name">Accesos tree</field>
+                <field name="model">monitoring.control</field>
+                <field name="arch" type="xml">
+                    <tree >
+                        <field name="name" />
+                        <field name="tipo_reg" />
+                        <field name="purchase_id" />
+                        <field name="hora_llegada" />
+                        <field name="hora_ingreso" />
+                        <field name="state"/>
+                    </tree>
+                </field>
+            </record>
+    <act_window
+        id="action_monitoring_control"
+        name="Control de Acceso"
+        res_model="monitoring.control"
+        view_mode="tree,form"
+    />
+    <menuitem id="monitoring_control_root" name="Control Acceso"/>
+    <menuitem id="monitoring_control_menu0" name="Control Acceso" sequence="0" parent="monitoring_control_root" action="action_monitoring_control"/>
     <!-- explicit list view definition -->
     <!--
     <record model="ir.ui.view" id="modulo.list">

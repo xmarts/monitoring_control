@@ -28,6 +28,9 @@
         'views/templates.xml',
         'reports/reports.xml',
     ],
+    'installable': True,
+    'aplication': True,
+    'auto_install': False,
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',

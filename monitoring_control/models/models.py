@@ -13,16 +13,19 @@ from odoo import models, fields, api
 #     def _value_pc(self):
 #         self.value2 = float(self.value) / 100
 
-class StockPickingAddFields(models.Model):
-	_name="stock.picking"
-	_inherit="stock.picking"
+class MonitoringControl(models.Model):
+	_name="monitoring.control"
 
 	@api.one
 	def _document_id(self):
-		self.n_document='DOC0'+str(self.id)
+		if self.id < 10:
+			self.name='DOC0'+str(self.id)
+		else:
+			self.name='DOC'+str(self.id)
 
+	state = fields.Selection([('borrador', 'Borrador'),('confirmada', 'Acceso confirmado')],default='borrador', string="Estado")
+	name = fields.Char(string="N° de documento", compute=_document_id)
 	tipo_reg = fields.Selection((('entrada','Entrada'),('salida','Salida')),string="Tipo de registro")
-	n_document = fields.Char(string="N° de documento", compute=_document_id)
 	hora_llegada = fields.Datetime(string="Fecha y hora de llegada")
 	hora_ingreso = fields.Datetime(string="Fecha y hora de ingreso")
 	nombre_chofer = fields.Char(string="Nombre del chofer")
@@ -37,8 +40,23 @@ class StockPickingAddFields(models.Model):
 	origen = fields.Char(string="Origen")
 	destino = fields.Char(string="Destino")
 	cedis = fields.Char(string="Cedis")
+	purchase_id = fields.Many2one('purchase.order', string="Orden de compra")
+	#purchase_lines = fields.One2many('purchase.order.line', related="purchase_id.order_line")
 
+	@api.onchange('tipo_reg')
+	def onchange_tipo_reg(self):
+		if self.tipo_reg=='salida':
+			self.purchase_id=''
 
+	def action_confirm_control(self):
+		self.ensure_one()
+		if self.state == 'borrador':
+			self.state = 'confirmada'
+
+	def action_draft_control(self):
+		self.ensure_one()
+		if self.state == 'confirmada':
+			self.state = 'borrador'
 
 #class StockPickingType(models.Model):
 #	_name="stock.picking.type"
