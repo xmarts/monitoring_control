@@ -3,83 +3,198 @@
 	<data>
 		<template id="report_monitoring_control">
 			<t t-call="web.html_container">
-				<t t-foreach="docs" t-as="o">
-				<t t-call="web.external_layout">
-					<div class="page">
-						<h2>
-							<span t-field="o.name"/>
-						</h2>
-						<div class="row mt32 mb32" name="driver_info" width="100%">
-							<div class="col-xs-3" t-if="o.tipo_reg">
-								<strong>Tipo de registro:</strong>
-								<p t-field="o.tipo_reg"/>
-							</div>
-							<div class="col-xs-3" t-if="o.purchase_id">
-								<strong>Orden de compra:</strong>
-								<p t-field="o.purchase_id"/>
-							</div>
-							<div class="col-xs-3" t-if="o.hora_llegada">
-								<strong>Hora de llegada:</strong>
-								<p t-field="o.hora_llegada"/>
-							</div>
-							<div class="col-xs-3" t-if="o.hora_ingreso">
-								<strong>Hora de ingreso:</strong>
-								<p t-field="o.hora_ingreso"/>
-							</div>
-							<div class="col-xs-3" t-if="o.nombre_chofer">
-								<strong>Nombre del chofer:</strong>
-								<p t-field="o.nombre_chofer"/>
-							</div>
-							<div class="col-xs-3" t-if="o.tipo_trans">
-								<strong>Tipo de transporte:</strong>
-								<p t-field="o.tipo_trans"/>
-							</div>
-							<div class="col-xs-3" t-if="o.placas_tractor">
-								<strong>Placas del tractor:</strong>
-								<p t-field="o.placas_tractor"/>
-							</div>
-							<div class="col-xs-3" t-if="o.placas_caja">
-								<strong>Placas de caja:</strong>
-								<p t-field="o.placas_caja"/>
-							</div>
-							<div class="col-xs-3" t-if="o.placas_caja_dos">
-								<strong>Placas de caja 2:</strong>
-								<p t-field="o.placas_caja_dos"/>
-							</div>
-							<div class="col-xs-3" t-if="o.condiciones_trans">
-								<strong>Condiciones del transporte:</strong>
-								<p t-field="o.condiciones_trans"/>
-							</div>
-							<div class="col-xs-3" t-if="o.proveedor_linea">
-								<strong>Proveedor y linea de transporte:</strong>
-								<p t-field="o.proveedor_linea"/>
-							</div>
-							<div class="col-xs-3" t-if="o.tipo_licencia">
-								<strong>Tipo de licencia:</strong>
-								<p t-field="o.tipo_licencia"/>
-							</div>
-							<div class="col-xs-3" t-if="o.licencia">
-								<strong>N° de licencia:</strong>
-								<p t-field="o.licencia"/>
-							</div>
-							<div class="col-xs-3" t-if="o.origen">
-								<strong>Origen:</strong>
-								<p t-field="o.origen"/>
-							</div>
-							<div class="col-xs-3" t-if="o.destino">
-								<strong>Destino:</strong>
-								<p t-field="o.destino"/>
-							</div>
-							<div class="col-xs-3" t-if="o.cedis">
-								<strong>CEDIS:</strong>
-								<p t-field="o.cedis"/>
-							</div>
-						</div>
-						
-					</div>
-				</t>
-			</t>
-			</t>
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-call="web.internal_layout">
+                            <t t-if="not o and doc">
+                                <t t-set="o" t-value="doc"/>
+                            </t>
+                            <t t-if="o and 'company_id' in o">
+                                <t t-set="company" t-value="o.company_id.sudo()"/>
+                            </t>
+                            <t t-if="not o or not 'company_id' in o">
+                                <t t-set="company" t-value="res_company"/>
+                            </t>
+                            <t t-lang="company.partner_id.lang"/>
+                            <div class="header">
+                                <div class="row">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="25%" style="vertical-align: middle;"><img t-if="company.logo" height="80px" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"/></td>
+                                            <td width="20%" style="vertical-align: middle; padding-left: 20px;">
+                                                <ul class="list-unstyled">
+                                                    <strong><li t-if="company.name"><span t-field="company.name"/></li></strong>
+                                                    <li><span t-field="company.street"/></li>
+                                                    <li><span t-field="company.city"/>, <span t-field="company.state_id.name"/></li>
+                                                    <li>CP. <span t-field="company.zip"/></li>
+                                                    <li>RFC: <span t-field="company.vat"/></li>
+                                                </ul>
+                                            </td>
+                                            <td width="55%" style="vertical-align: middle;">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="45%" class="text-right">FECHA/HORA LLEGADA: </td>
+                                                        <td width="55%" style="border: solid gray 1px;" class="text-center"><span t-field="o.hora_llegada"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">FECHA/HORA INGRESO: </td>
+                                                        <td style="border: solid gray 1px;" class="text-center"><span t-field="o.hora_ingreso"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right">FOLIO: </td>
+                                                        <td style="border: solid gray 1px; color: red;" class="text-center"><span t-field="o.name"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" class="text-right">NOTA: ANEXAR A NOTA DE ENTRADA DE ALMACEN</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="page">
+                                <br/>
+                                <table class="text-center" width="100%" style="font-size: 12px;">
+                                    <tr>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>PROVEEDOR</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>PRODUCTO</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>UNIDADES</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>PRESENTACION</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>TICKET BELENES</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>NOTA ENTRADA</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>FACTURA</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px; padding: 5px;"><strong>LINEA FLETERA</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                        <td style="border: solid gray 1px;"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <table class="text-center" width="100%" style="font-size: 12px;">
+                                    <tr>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>PLACAS CAJA</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>PLACAS TRACTOR</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>HUMEDAD %</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>TEXTURA %</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>DENSIDAD</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>°BRIX</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>TEMPERATURA °C</strong></td>
+                                        <td width="12.5%" style="border: solid gray 1px;"><strong>CARBONATOS</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: solid gray 1px;"><span t-field="o.placas_caja"/><span t-if="o.placas_caja_dos">, <t t-esc="o.placas_caja_dos"/></span></td>
+                                        <td style="border: solid gray 1px;"><span t-field="o.placas_tractor"/></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: solid gray 1px;"><strong>A.U.</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>TANINOS %</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>RANCIDEZ</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>AGL</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>PLAGA</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>CADUCIDAD</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>ELABORACION</strong></td>
+                                        <td style="border: solid gray 1px;"><strong>LOTE</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="4" style="border: solid gray 1px; padding: 5px;"><strong>NOMBRE DEL CHOFER: </strong><t t-esc="o.nombre_chofer" /></td>
+                                        <td class="text-left" style="border: solid gray 1px; padding: 5px; font-size: 11px;"><strong>CONDICIONES DE TRANSPORTE</strong></td>
+                                        <td style="border: solid gray 1px;"><span t-field="o.condiciones_trans"/></td>
+                                        <td class="text-left" style="border: solid gray 1px; padding: 5px;"><strong>SITUACION DE PRODUCTO</strong></td>
+                                        <td style="border: solid gray 1px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="8" style="padding: 5px; border: solid gray 1px;"><strong>OBSERVACIONES: </strong>d</td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <hr/>
+                                <br/>
+                                <br/>
+                                <table class="text-center" width="100%" style="font-size: 12px;">
+
+                                    <tr>
+                                        <td width="24%" style="border-top: solid black 1px;"></td>
+                                        <td width="1%" ></td>
+                                        <td width="24%" style="border-top: solid black 1px;" ></td>
+                                        <td width="1%" ></td>
+                                        <td width="24%" style="border-top: solid black 1px;" ></td>
+                                        <td width="1%" ></td>
+                                        <td width="24%" style="border-top: solid black 1px;" ></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                NOMBRE Y FIRMA DEL VIGILANTE<br/>
+                                                ORIGINAL ENTRADA DE ALMACEN
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <strong>
+                                                NOMBRE Y FIRMA BASCULA<br/>
+                                                1ra. COPIA BASCULA
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <strong>
+                                                NOMBRE Y FIRMA CALIDAD<br/>
+                                                2da. COPIA CALIDAD
+                                            </strong>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <strong>
+                                                NOMBRE Y FIRMA ALMACEN<br/>
+                                                2da. COPIA VIGILANCIA CONSECUTIVO
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                            </div>
+
+                            <div class="footer">
+                                <div class="text-center">
+                                    <ul class="list-inline">
+                                        <li t-if="company.phone">Tel.: <span t-field="company.phone"/></li>
+                                        <li t-if="company.email">Correo: <span t-field="company.email"/></li>
+                                        <li t-if="company.website">Web: <span t-field="company.website"/></li>
+                                        <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'RFC'"/>: <span t-field="company.vat"/></li>
+                                    </ul>
+                                    <div t-field="company.report_footer"/>
+                                    <div>
+                                        Página: <span class="page"/>/<span class="topage"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </t>
 		</template>
 		<report
             string="Control de acceso"
