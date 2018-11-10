@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','stock','purchase'],
+    'depends': ['base','stock','purchase','sale','contacts','xmarts_sales_process'],
 
     # always loaded
     'data': [

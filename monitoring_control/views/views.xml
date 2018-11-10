@@ -50,8 +50,9 @@
                 <field name="arch" type="xml">
                     <form>
                         <header>
-                          <button string='Confirmar' name="action_confirm_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
-                          <button string='Cabiar a borrador' name="action_draft_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','confirmada')]}" />
+                          <button string='Aceptar' name="action_acept_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
+                          <button string='Rechazar' name="action_refuse_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
+                          <button string='Cabiar a borrador' name="action_draft_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','=','borrador')]}" />
                           <field name="state" widget="statusbar"/>
                         </header>
                         <sheet string="Control de acceso">
@@ -64,42 +65,66 @@
                           </div>
                           <group>
                             <group>
-                              <field name="tipo_reg" attrs="{'readonly':[('state','=','confirmada')]}" />
-                              <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}" />
+                              <field name="tipo_reg" />
+                              <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
+                              <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')]}"/>
+                              <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
+                              <field name="carrier_id" domain="[('is_carrier','=',True)]"/>
                             </group>
                             <group>
-                              <field name="hora_llegada" attrs="{'readonly':[('state','=','confirmada')]}" />
-                              <field name="hora_ingreso" attrs="{'readonly':[('state','=','confirmada')]}" />
+                              <field name="hora_llegada" />
+                              <field name="hora_ingreso" />
+                              <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
                             </group>
                           </group>
                             <notebook>
                                 <page name="transporte" string="Datos del transporte">
                                   <group name="datos_transporte">
                                     <group>
-                                    <field name="tipo_trans" attrs="{'readonly':[('state','=','confirmada')]}" />
-                                    <field name="placas_tractor" attrs="{'readonly':[('state','=','confirmada')]}" />
-                                    <field name="placas_caja" attrs="{'readonly':[('state','=','confirmada')]}" />
-                                    <field name="placas_caja_dos" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                    <field name="tipo_trans" />
+                                    <field name="placas_tractor" />
                                   </group>
                                   <group>
-                                    <field name="condiciones_trans" attrs="{'readonly':[('state','=','confirmada')]}" />
-                                    <field name="proveedor_linea" attrs="{'readonly':[('state','=','confirmada')]}" />
+                                    <field name="placas_caja" />
+                                    <field name="placas_caja_dos" />
                                   </group>
+                                  </group>
+                                </page>
+                                <page string="Revisión">
+                                  <group>
+                                    <field name="clean_unit" />
+                                    <field name="no_leaks" />
+                                    <field name="damage_door_floor" />
+                                  </group>
+                                  <group>
+                                    <field name="odor_free" />
+                                    <field name="no_graffiti" />
+                                    <field name="condiciones_trans" />
                                   </group>
                                 </page>
                                 <page name="chofer" string="Datos del chofer" >
                                   <group name="datos_chofer">
                                     <group>
-                                      <field name="nombre_chofer" attrs="{'readonly':[('state','=','confirmada')]}"/>
-                                      <field name="tipo_licencia" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
-                                      <field name="licencia" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                      <field name="nombre_chofer" />
+                                      <field name="tipo_licencia" />
+                                      <field name="licencia" />
                                     </group>
                                     <group>
-                                      <field name="origen" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
-                                      <field name="destino" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
-                                      <field name="cedis" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('state','=','confirmada')]}"/>
+                                      <field name="origen" attrs="{'required':[('tipo_reg','=','salida')]}" />
+                                      <field name="destino" attrs="{'required':[('tipo_reg','=','salida')]}" />
+                                      <field name="cedis" />
                                     </group>
                                   </group>
+                                </page>
+                                <page string="Productos">
+                                  <field name="product_lines" >
+                                    <tree>
+                                      <field name="product_id" />
+                                      <field name="product_qty"/>
+                                      <field name="product_uom" />
+                                      <field name="fecha" />
+                                    </tree>
+                                  </field>
                                 </page>
                                 <!--
                                 <page string="Lineas">
