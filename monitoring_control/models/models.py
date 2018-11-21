@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+import datetime
+from datetime import date
+from dateutil.relativedelta import relativedelta
+from odoo import models, fields, api, exceptions, _
 
 
 class ResPartner(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
 
-    no_validate_sale = fields.Boolean(string='Sin validación de venta')
+    no_validate_sale = fields.Boolean(string='Sin validación de venta', default=False)
     is_carrier = fields.Boolean(string='Es transportista')
 
     @api.onchange('supplier')
@@ -68,6 +71,25 @@ class TransporterRoutes(models.Model):
     time = fields.Float(string='Tiempo aproximado de entrega (Horas).')
 
 
+# class SaleConfigSettings(models.Model):
+#     _inherit = "res.company"
+
+#     user_logistica = fields.Many2one('res.users',string="Usuario validador de logistica")
+
+
+# class ResConfigSettings(models.TransientModel):
+#     _inherit = "res.config.settings"
+
+#     user_logistica = fields.Many2one('res.users', string="Usuario validador de logistica", related='company_id.user_logistica')
+
+
+class addPermission(models.Model):
+    _name = 'res.users'
+    _inherit = 'res.users'
+
+    valida_logistica = fields.Boolean(string='Validación logistica de ventas', default=False)
+
+
 class SaleOrder(models.Model):
     _name = 'sale.order'
     _inherit = 'sale.order'
@@ -76,8 +98,8 @@ class SaleOrder(models.Model):
     valid_from = fields.Date(string='Vigente desde')
     valid_until = fields.Date(string='Vigente hasta')
     publication_date = fields.Date(string='Fecha de publicación')
-    rev_cred_coll = fields.Boolean(string='Validado por credito y cobranza', default=False)
-    rev_logistic = fields.Boolean(string='Validado por logistica', default=False)
+    rev_cred_coll = fields.Selection([('pendiente','Pendiente de autorizar'),('aceptado','Aceptado'),('rechazado','Rechazado')],string='Validado por credito y cobranza', default='pendiente')
+    rev_logistic = fields.Selection([('pendiente','Pendiente de autorizar'),('aceptado','Aceptado'),('rechazado','Rechazado')],string='Validado por logistica', default='pendiente')
 
     #Datos en nueva sección
     deadline = fields.Datetime(string='Fecha/Hora de entrega')
@@ -105,30 +127,85 @@ class SaleOrder(models.Model):
         ('in_route','En ruta'),
         ('delivered','Entregado')], string='Estado del transporte')
 
+    request_sent_l = fields.Selection([('si','Si'),('no','No')],string="Solicitud a logistica enviada", readonly=False, default='no')
+
+    @api.onchange('partner_id')
+    def onchange_cliente_partner(self):
+            if self.partner_id.no_validate_sale == True:
+                self.rev_cred_coll = 'aceptado'
+                self.rev_logistic = 'aceptado'
+                self.request_sent_l = 'si'
+            else:
+                self.rev_cred_coll = 'pendiente'
+                self.rev_logistic = 'pendiente'
+                self.request_sent_l = 'no'
+
+    @api.one
+    @api.model
+    def notificar_logistica(self):
+        activity_obj = self.env['mail.activity']
+        sale_model = self.env['ir.model'].search([('model','=','sale.order')],limit=1)
+        users_l = self.env['res.users'].search([('valida_logistica','=',True)])
+        for u in users_l:
+            today = datetime.date.today()
+            activity_values = {
+                'res_id': self.id,
+                'res_model_id': sale_model.id,
+                'res_model': 'sale.order',
+                'date_deadline': today,
+                'user_id': u.id,
+                'note': 'Validación de la venta '+str(self.name)+' por parte de logistica'
+            }
+            activity_id = activity_obj.create(activity_values)
+
+
+    @api.one
+    @api.multi
+    def write(self, vals):
+        cre = vals.get('rev_cred_coll')
+        log = vals.get('request_sent_l')
+        if cre == 'aceptado':
+            if not self.request_sent_l == 'si':
+                self.notificar_logistica()
+                vals['request_sent_l'] = 'si'
+        res = super(SaleOrder, self).write(vals)
+        return res
+
     @api.multi
     def action_confirm(self):
         self.ensure_one()
         res = super(SaleOrder, self).action_confirm()
-        if self.partner_id.no_validate_sale == False:
-            if self.rev_cred_coll == True and self.rev_logistic == True:
-                return res
-            else:
-                if self.rev_cred_coll == True and self.rev_logistic == False:
-                    raise exceptions.ValidationError('El pedido aun tiene que ser validado por logistica')
-                if self.rev_cred_coll == False and self.rev_logistic == True:
-                    raise exceptions.ValidationError('El pedido aun tiene que ser validado por credito y cobranza')
-                if self.rev_cred_coll == False and self.rev_logistic == False:
-                    raise exceptions.ValidationError('El pedido aun tiene que ser validado por credito y cobranza y logistica')
-        else:
+        if self.partner_id.no_validate_sale == True:
             return res
+        else:
+            if self.rev_cred_coll == 'pendiente' and self.rev_logistic == 'pendiente':
+                raise exceptions.ValidationError('El pedido aun tiene que ser validado por credito y cobranza y logistica')
+            if self.rev_cred_coll == 'aceptado' and self.rev_logistic == 'pendiente':
+                raise exceptions.ValidationError('El pedido aun tiene que ser validado por logistica')
+            if self.rev_cred_coll == 'rechazado' and self.rev_logistic != 'rechazado':
+                raise exceptions.ValidationError('El pedido rechazado por credito y cobranza')
+            if self.rev_cred_coll != 'rechazado' and self.rev_logistic == 'rechazado':
+                raise exceptions.ValidationError('El pedido rechazado por logistica')
+            if self.rev_cred_coll == 'rechazado' and self.rev_logistic == 'rechazado':
+                raise exceptions.ValidationError('El pedido rechazado por credito y cobranza y logistica')
+            if self.rev_cred_coll == 'aceptado' and self.rev_logistic == 'aceptado':
+                return res
+
+            
 
     @api.multi
     def action_cancel(self):
+        self.ensure_one()
         self.rev_cred_coll = False
         self.rev_logistic = False
         res = super(SaleOrder, self).action_cancel()
         return res
 
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    deadline = fields.Datetime(string='Fecha/Hora de entrega', related="order_id.deadline")
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
@@ -205,7 +282,8 @@ class MonitoringControl(models.Model):
     sale_id = fields.Many2one('sale.order', string="Orden de venta")
     provider_id = fields.Many2one('res.partner', string="Proveedor", related="purchase_id.partner_id", readonly=True)
     carrier_id = fields.Many2one('res.partner', string="Transportista")
-    product_lines = fields.One2many("monitoring.products", "monitoring_id", string="Productos", readonly=True)
+    purchase_lines = fields.One2many("purchase.order.line", string="Productos", related="purchase_id.order_line")
+    sale_lines = fields.One2many("sale.order.line", string="Productos", related="sale_id.order_line")
 
     motivo_rechazo = fields.Many2one("monitoring.motivos", string="Motivo de rechazo")
 
@@ -231,6 +309,7 @@ class MonitoringControl(models.Model):
     agl = fields.Float(string="AGL")
     plague = fields.Float(string="Plaga")
 
+
     @api.onchange('purchase_id')
     def onchange_purchase_id(self):
         #Pone en blanco los campos necesarios
@@ -246,14 +325,6 @@ class MonitoringControl(models.Model):
         self.damage_door_floor = False
         self.odor_free = False
         self.no_graffiti = False
-
-        #Carga las lineas del pedido de compra
-        self.product_lines = []
-        lista = []
-        if self.purchase_id:
-            for p in self.purchase_id.order_line:
-                lista.append((0, 4, {'product_id': p.product_id.id, 'fecha': p.date_planned, 'product_uom': p.product_uom.id, 'product_qty': p.product_qty}))
-            self.product_lines = lista
 
     @api.onchange('sale_id')
     def onchange_sale_id(self):
@@ -272,9 +343,6 @@ class MonitoringControl(models.Model):
         self.no_graffiti = False
 
         #Carga las lineas del pedido de venta
-        self.product_lines = []
-        lista = []
-        fecha = self.sale_id.deadline
         if self.sale_id:
             self.carrier_id = self.sale_id.carrier_line
             self.nombre_chofer = self.sale_id.operator_name
@@ -287,10 +355,6 @@ class MonitoringControl(models.Model):
             self.damage_door_floor = self.sale_id.damage_door_floor
             self.odor_free = self.sale_id.odor_free
             self.no_graffiti = self.sale_id.no_graffiti
-            for p in self.sale_id.order_line:
-                lista.append((0, 4, {'product_id': p.product_id.id, 'fecha': fecha, 'product_uom': p.product_uom.id, 'product_qty': p.product_uom_qty}))
-            self.product_lines = lista
-
 
     @api.onchange('tipo_reg')
     def onchange_tipo_reg(self):

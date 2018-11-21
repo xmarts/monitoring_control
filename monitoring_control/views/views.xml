@@ -15,11 +15,48 @@
       </field>
     </record>
 
+   <!--  <record id="monit_control_sale_config" model="ir.ui.view">
+      <field name="name">monit_control_sale_config</field>
+      <field name="model">res.config.settings</field>
+      <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//div[@data-string='Sales']" position="inside">
+          <h2>Logistica</h2>
+          <div class="row mt16 o_settings_container">
+           <div class="col-xs-12 col-md-6 o_setting_box">
+            <div class="o_setting_left_pane"/>
+              <div class="o_setting_right_pane">
+                  <span class="o_form_label">Usuario encargado de logistica</span>
+                  <div class="text-muted">
+                      Seleccione usuario encargado de logistica para validar compras.
+                  </div>
+                  <div class="text-muted">
+                      <field name="user_logistica"/>
+                  </div>
+              </div>
+           </div>
+         </div>
+        </xpath>
+      </field>
+      </record> -->
+
+    <record id="belenes_add_fields_users" model="ir.ui.view">
+        <field name="name">belenes_add_fields_users</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.user_groups_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='in_group_5']" position="after">
+                <field name="valida_logistica"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="xmarts_sales_process_fields" model="ir.ui.view">
       <field name="name">xmarts_sales_process_fields</field>
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
+
         <xpath expr="//sheet/group[1]" position="inside">
           <group>
             <field name="valid_from" />
@@ -28,9 +65,12 @@
           </group>
           <group>
             <field name="rev_cred_coll" groups="account.group_account_manager" attrs="{'readonly': [('state', 'in', ['sale','done','cancel'])]}"/>
+            <field name="request_sent_l" invisible="1"/>
+            <!-- <button string='Solicitar validación de logistica' name="notificar_logistica" type="object" attrs="{'invisible':['|','|',('request_sent_l','=','si'), ('rev_cred_coll','in',['rechazado','pendiente']),('rev_logistic','in',['rechazado','aceptado'])]}" /> -->
             <field name="rev_logistic" attrs="{'readonly': [('state', 'in', ['sale','done','cancel'])]}"/>
           </group>
         </xpath>
+
         <xpath expr="//notebook" position="inside">
           <page string='Trasporte'>
             <group>
@@ -65,25 +105,25 @@
       </field>
     </record>
 
-    <record    id="view_form_sales_route" model="ir.ui.view">
+    <record id="view_form_sales_route" model="ir.ui.view">
       <field name="name">Formulario Rutas</field>
       <field name="model">sales.route</field>
       <field name="arch" type="xml">
-          <form>
-              <header></header>
-              <sheet string="Rutas">
-                  <group>
-                      <group >
-                          <field name="name"/>
-                          <field name="time" widget="float_time"/>
-                      </group>
-                      <group>
-                          <field name="origin"/>
-                          <field name="destination"/>
-                      </group>
-                  </group>
-              </sheet>
-          </form>
+        <form>
+          <header></header>
+          <sheet string="Rutas">
+            <group>
+              <group >
+                <field name="name"/>
+                <field name="time" widget="float_time"/>
+              </group>
+              <group>
+                <field name="origin"/>
+                <field name="destination"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
       </field>
     </record>
 
@@ -100,16 +140,16 @@
     </record>
 
     <act_window
-                id="action_sales_routes"
-                name="Rutas"
-                res_model="sales.route"
-                view_mode="tree,form"/>
+      id="action_sales_routes"
+      name="Rutas"
+      res_model="sales.route"
+      view_mode="tree,form"/>
 
     <menuitem id="sales_process_routes"
-            name="Rutas"
-            parent="sale.menu_sale_config"
-            action="action_sales_routes"
-            sequence="66"/>
+      name="Rutas"
+      parent="sale.menu_sale_config"
+      action="action_sales_routes"
+      sequence="66"/>
 
 
 
@@ -245,16 +285,29 @@
                           </group>
                         </group>
                       </page>
-                      <page string="Productos">
-                        <field name="product_lines" >
+
+                      <page string="Productos" attrs="{'invisible':[('tipo_reg','!=','entrada')]}">
+                        <field name="purchase_lines" >
                           <tree>
                             <field name="product_id" />
                             <field name="product_qty"/>
                             <field name="product_uom" />
-                            <field name="fecha" />
+                            <field name="date_planned" />
                           </tree>
                         </field>
                       </page>
+
+                      <page string="Productos" attrs="{'invisible':[('tipo_reg','!=','salida')]}">
+                        <field name="sale_lines" >
+                          <tree>
+                            <field name="product_id" />
+                            <field name="product_uom_qty"/>
+                            <field name="product_uom" />
+                            <field name="deadline" />
+                          </tree>
+                        </field>
+                      </page>
+
                       <page string="Control Calidad">
                         <group>
                           <group>
