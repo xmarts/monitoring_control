@@ -1,5 +1,6 @@
 <odoo>
   <data>
+<<<<<<< HEAD
 
     <record id="xmarts_sales_process_res_partner" model="ir.ui.view">
       <field name="name">xmarts_sales_process_res_partner</field>
@@ -232,20 +233,35 @@
                         <field name="name" readonly="1"/>
                     </h1>
                 </div>
+=======
+    <!-- <record id="monitoring_add_fields_type_operation" model="ir.ui.view">
+        <field name="name">monitoring_add_fields_type_operation</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence_id']" position="after">
+                <field name="monitoring_control" />
+            </xpath>
+        </field>
+    </record> 
+    <record id="monitoring_add_fields_stock_operation" model="ir.ui.view">
+        <field name="name">monitoring_add_fields_stock_operation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']" position="inside">
+              <group>
+>>>>>>> parent of ac692db... puntos 2,3,4,5,7
                 <group>
-                  <group>
-                    <field name="tipo_reg" />
-                    <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
-                    <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')]}"/>
-                    <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
-                    <field name="carrier_id" domain="[('is_carrier','=',True)]"/>
-                  </group>
-                  <group>
-                    <field name="hora_llegada" />
-                    <field name="hora_ingreso" />
-                    <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
-                  </group>
+                  <field name="tipo_reg" />
+                  <field name="purchase_id" readonly="1" string="N° Orden de compra" attrs="{'invisible':[('tipo_reg','!=','entrada')],'required':[('tipo_reg','=','entrada')]}" />
+                  <field name="n_document" readonly="1"/>
+                  <field name="hora_llegada" />
+                  <field name="hora_ingreso" />
+                  <field name="nombre_chofer" />
+                  <field name="tipo_trans" />
                 </group>
+<<<<<<< HEAD
                   <notebook>
                       <page name="transporte" string="Datos del transporte">
                         <group name="datos_transporte">
@@ -318,36 +334,143 @@
                             <field name="temperature" />
                             <field name="carbonates" />
                           </group>
-                          <group>
-                            <field name="a_u" />
-                            <field name="tannins" />
-                            <field name="rancidity" />
-                            <field name="agl" />
-                            <field name="plague" />
-                          </group>
-                        </group>
-                      </page>
-                  </notebook>
-              </sheet>
-              <div class="oe_chatter">
-              </div>
-          </form>
-      </field>
-    </record>
-    <record id="view_tree_monitoring_control" model="ir.ui.view">
-        <field name="name">Accesos tree</field>
-        <field name="model">monitoring.control</field>
-        <field name="arch" type="xml">
-            <tree >
-                <field name="name" />
-                <field name="tipo_reg" />
-                <field name="purchase_id" />
-                <field name="hora_llegada" />
-                <field name="hora_ingreso" />
-                <field name="state"/>
-            </tree>
+=======
+                <group>
+                  <field name="placas_tractor" />
+                  <field name="placas_caja" />
+                  <field name="placas_caja_dos" />
+                  <field name="condiciones_trans" />
+                  <field name="proveedor_linea" />
+                </group>
+                <group attrs="{'invisible':[('tipo_reg','!=','entrada')]}">
+                  <field name="tipo_licencia" attrs="{'required':[('tipo_reg','=','entrada')]}"/>
+                  <field name="licencia" attrs="{'required':[('tipo_reg','=','entrada')]}"/>
+                  <field name="origen" attrs="{'required':[('tipo_reg','=','entrada')]}"/>
+                  <field name="destino" attrs="{'required':[('tipo_reg','=','entrada')]}"/>
+                  <field name="cedis" attrs="{'required':[('tipo_reg','=','entrada')]}"/>
+                </group>
+              </group>
+            </xpath>
         </field>
-    </record>
+    </record>-->
+    <record    id="view_form_monitoring_control" model="ir.ui.view">
+                <field name="name">Accesos Form</field>
+                <field name="model">monitoring.control</field>
+                <field name="arch" type="xml">
+                    <form>
+                        <header>
+                          <button string='Aceptar' name="action_acept_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
+                          <button string='Rechazar' name="action_refuse_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
+                          <button string='Cabiar a borrador' name="action_draft_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','=','borrador')]}" />
+                          <field name="state" widget="statusbar"/>
+                        </header>
+                        <sheet string="Control de acceso">
+                          <div class="oe_button_box" name="button_box">
+                          </div>
+                          <div class="oe_title">
+                              <h1>
+                                  <field name="name" readonly="1"/>
+                              </h1>
+                          </div>
+>>>>>>> parent of ac692db... puntos 2,3,4,5,7
+                          <group>
+                            <group>
+                              <field name="tipo_reg" />
+                              <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
+                              <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')]}"/>
+                              <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
+                              <field name="carrier_id" domain="[('is_carrier','=',True)]"/>
+                            </group>
+                            <group>
+                              <field name="hora_llegada" />
+                              <field name="hora_ingreso" />
+                              <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
+                            </group>
+                          </group>
+                            <notebook>
+                                <page name="transporte" string="Datos del transporte">
+                                  <group name="datos_transporte">
+                                    <group>
+                                    <field name="tipo_trans" />
+                                    <field name="placas_tractor" />
+                                  </group>
+                                  <group>
+                                    <field name="placas_caja" />
+                                    <field name="placas_caja_dos" />
+                                  </group>
+                                  </group>
+                                </page>
+                                <page string="Revisión">
+                                  <group>
+                                    <field name="clean_unit" />
+                                    <field name="no_leaks" />
+                                    <field name="damage_door_floor" />
+                                  </group>
+                                  <group>
+                                    <field name="odor_free" />
+                                    <field name="no_graffiti" />
+                                    <field name="condiciones_trans" />
+                                  </group>
+                                </page>
+                                <page name="chofer" string="Datos del chofer" >
+                                  <group name="datos_chofer">
+                                    <group>
+                                      <field name="nombre_chofer" />
+                                      <field name="tipo_licencia" />
+                                      <field name="licencia" />
+                                    </group>
+                                    <group>
+                                      <field name="origen" attrs="{'required':[('tipo_reg','=','salida')]}" />
+                                      <field name="destino" attrs="{'required':[('tipo_reg','=','salida')]}" />
+                                      <field name="cedis" />
+                                    </group>
+                                  </group>
+                                </page>
+                                <page string="Productos">
+                                  <field name="product_lines" >
+                                    <tree>
+                                      <field name="product_id" />
+                                      <field name="product_qty"/>
+                                      <field name="product_uom" />
+                                      <field name="fecha" />
+                                    </tree>
+                                  </field>
+                                </page>
+                                <!--
+                                <page string="Lineas">
+                                  <field name="purchase_lines" >
+                                       <tree string="Líneas de pedido de compra" editable="bottom">
+                                          <field name="product_id" />
+                                          <field name="name"/>
+                                          <field name="product_qty"/>
+                                          <field name="qty_received" />
+                                          <field name="qty_invoiced" />
+                                          <field name="product_uom" />
+                                      </tree>
+                                  </field>
+                                </page>
+                                -->
+                            </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                        </div>
+                    </form>
+                </field>
+            </record>
+            <record id="view_tree_monitoring_control" model="ir.ui.view">
+                <field name="name">Accesos tree</field>
+                <field name="model">monitoring.control</field>
+                <field name="arch" type="xml">
+                    <tree >
+                        <field name="name" />
+                        <field name="tipo_reg" />
+                        <field name="purchase_id" />
+                        <field name="hora_llegada" />
+                        <field name="hora_ingreso" />
+                        <field name="state"/>
+                    </tree>
+                </field>
+            </record>
     <act_window
         id="action_monitoring_control"
         name="Control de Acceso"
@@ -356,58 +479,61 @@
     />
     <menuitem id="monitoring_control_root" name="Control Acceso"/>
     <menuitem id="monitoring_control_menu0" name="Control Acceso" sequence="0" parent="monitoring_control_root" action="action_monitoring_control"/>
-
-
-    <record    id="view_form_addition_products" model="ir.ui.view">
-      <field name="name">Aditamentos</field>
-      <field name="model">product.addition</field>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="modulo.list">
+      <field name="name">modulo list</field>
+      <field name="model">modulo.modulo</field>
       <field name="arch" type="xml">
-          <form>
-              <header>
-
-              </header>
-              <sheet string="Aditamentos">
-                <div class="oe_button_box" name="button_box">
-                </div>
-                <div class="oe_title">
-                    <h1>
-                        <field name="name"/>
-                    </h1>
-                </div>
-                <group>
-                  <group>
-                    <field name="product_id" />
-                    <field name="weight" />
-                  </group>
-                </group>
-              </sheet>
-              <div class="oe_chatter">
-              </div>
-          </form>
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
       </field>
     </record>
-    <record id="view_tree_addition_products" model="ir.ui.view">
-      <field name="name">Aditamentos</field>
-      <field name="model">product.addition</field>
-        <field name="arch" type="xml">
-            <tree >
-                <field name="name" />
-                <field name="product_id" />
-                <field name="weight" />
-            </tree>
-        </field>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="modulo.action_window">
+      <field name="name">modulo window</field>
+      <field name="res_model">modulo.modulo</field>
+      <field name="view_mode">tree,form</field>
     </record>
-    <act_window
-        id="action_addition_products"
-        name="Aditamentos"
-        res_model="product.addition"
-        view_mode="tree,form"
-    />
-    <menuitem id="addition_products_menu0" name="Aditamentos" sequence="67" parent="sale.menu_sale_config" action="action_addition_products"/>
-    <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu1" parent="stock.menu_warehouse_config" sequence="67"/>
-    <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu2" parent="purchase.menu_product_in_config_purchase" sequence="67"/>
+    -->
 
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="modulo.action_server">
+      <field name="name">modulo server</field>
+      <field name="model_id" ref="model_modulo_modulo"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
 
-
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="modulo" id="modulo.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="modulo.menu_1" parent="modulo.menu_root"/>
+    <menuitem name="Menu 2" id="modulo.menu_2" parent="modulo.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="modulo.menu_1_list" parent="modulo.menu_1"
+              action="modulo.action_window"/>
+    <menuitem name="Server to list" id="modulo" parent="modulo.menu_2"
+              action="modulo.action_server"/>
+    -->
   </data>
 </odoo>
