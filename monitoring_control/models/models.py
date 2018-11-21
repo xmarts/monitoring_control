@@ -100,7 +100,6 @@ class SaleOrder(models.Model):
     publication_date = fields.Date(string='Fecha de publicación')
     rev_cred_coll = fields.Selection([('pendiente','Pendiente de autorizar'),('aceptado','Aceptado'),('rechazado','Rechazado')],string='Validado por credito y cobranza', default='pendiente')
     rev_logistic = fields.Selection([('pendiente','Pendiente de autorizar'),('aceptado','Aceptado'),('rechazado','Rechazado')],string='Validado por logistica', default='pendiente')
-
     #Datos en nueva sección
     deadline = fields.Datetime(string='Fecha/Hora de entrega')
     confirmation_number = fields.Char(string='Nº de confirmación')
@@ -126,8 +125,8 @@ class SaleOrder(models.Model):
         ('rejected','Rechazado'),
         ('in_route','En ruta'),
         ('delivered','Entregado')], string='Estado del transporte')
-
     request_sent_l = fields.Selection([('si','Si'),('no','No')],string="Solicitud a logistica enviada", readonly=False, default='no')
+
 
     @api.onchange('partner_id')
     def onchange_cliente_partner(self):
@@ -139,6 +138,7 @@ class SaleOrder(models.Model):
                 self.rev_cred_coll = 'pendiente'
                 self.rev_logistic = 'pendiente'
                 self.request_sent_l = 'no'
+
 
     @api.one
     @api.model
@@ -171,6 +171,7 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).write(vals)
         return res
 
+
     @api.multi
     def action_confirm(self):
         self.ensure_one()
@@ -191,7 +192,6 @@ class SaleOrder(models.Model):
             if self.rev_cred_coll == 'aceptado' and self.rev_logistic == 'aceptado':
                 return res
 
-            
 
     @api.multi
     def action_cancel(self):
