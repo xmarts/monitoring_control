@@ -3,7 +3,7 @@
     'name': "Monitoring Control",
 
     'summary': """
-        Module to add customizatios for monitorins control""",
+        Module to add customizatios for monitorins control and sales proccess""",
 
     'description': """
         Module to add customizatios for monitorins control
