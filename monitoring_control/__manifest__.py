@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Monitoring Control for Belenes",
+    'name': "Monitoring Control",
 
     'summary': """
         Module to add customizatios for monitorins control""",
@@ -16,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': '0.1',
+    'version': '3',
 
     # any module necessary for this one to work correctly
     'depends': ['base','stock','purchase','sale','contacts','sale_management'],
