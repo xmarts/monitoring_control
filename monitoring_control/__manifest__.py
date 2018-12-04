@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Monitoring Control",
+    'name': "Monitoring Control for Belenes",
 
     'summary': """
-        Module to add customizatios for monitorins control and sales proccess""",
+        Module to add customizatios for monitorins control and change sales process""",
 
     'description': """
-        Module to add customizatios for monitorins control
+        Module to add customizatios for monitorins control and change sales process
     """,
 
     'author': "Xmarts, Pablo Osorio Gama",
@@ -16,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': '3',
+    'version': '4',
 
     # any module necessary for this one to work correctly
     'depends': ['base','stock','purchase','sale','contacts','sale_management'],
