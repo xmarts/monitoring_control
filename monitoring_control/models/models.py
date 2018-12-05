@@ -235,14 +235,14 @@ class PurchaseOrder(models.Model):
         self.kg_amount = self.ton_amount / 1000
 
 
-# class MonitoringProducts(models.Model):
-#     _name = "monitoring.products"
+class MonitoringProducts(models.Model):
+    _name = "monitoring.products"
 
-#     monitoring_id = fields.Many2one("monitoring.control")
-#     product_id = fields.Many2one("product.product",string="Producto", readonly=True)
-#     fecha = fields.Datetime(string="Fecha prevista", readonly=True)
-#     product_uom = fields.Many2one("product.uom", string="Unidad de medida", readonly=True)
-#     product_qty = fields.Float(string="Cantidad", readonly=True)
+    monitoring_id = fields.Many2one("monitoring.control")
+    product_id = fields.Many2one("product.product",string="Producto", readonly=True)
+    fecha = fields.Datetime(string="Fecha prevista", readonly=True)
+    product_uom = fields.Many2one("product.uom", string="Unidad de medida", readonly=True)
+    product_qty = fields.Float(string="Cantidad", readonly=True)
         
 
 class MonitoringMotivos(models.Model):
