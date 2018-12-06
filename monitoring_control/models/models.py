@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-
+from datetime import datetime, date, time, timedelta
+import calendar
 
 class ResPartner(models.Model):
     _name = 'res.partner'
