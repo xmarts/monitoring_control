@@ -14,6 +14,10 @@ class ResPartner(models.Model):
         if self.supplier == False:
             self.is_carrier = False
 
+class ResUsers(models.Model):
+    _inherit = "res.users"
+    
+    valida_logistica = fields.Boolean(string="Valida Logistica", default=False)
 
 class ProductAddition(models.Model):
     _name = "product.addition"
