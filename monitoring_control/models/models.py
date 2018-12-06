@@ -130,7 +130,7 @@ class SaleOrder(models.Model):
         sale_model = self.env['ir.model'].search([('model','=','sale.order')],limit=1)
         users_l = self.env['res.users'].search([('valida_logistica','=',True)])
         for u in users_l:
-            today = datetime.date.today()
+            today = date.today()
             activity_values = {
                 'res_id': self.id,
                 'res_model_id': sale_model.id,
