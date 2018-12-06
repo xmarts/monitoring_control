@@ -15,7 +15,7 @@
       </field>
     </record>
 
-    <record id="belenes_add_fields_users_log" model="ir.ui.view">
+<!--     <record id="belenes_add_fields_users_log" model="ir.ui.view">
         <field name="name">belenes_add_fields_users_log</field>
         <field name="model">res.users</field>
         <field name="inherit_id" ref="base.user_groups_view"/>
@@ -24,7 +24,7 @@
                 <field name="valida_logistica"/>
             </xpath>
         </field>
-    </record>
+    </record> -->
 
     <record id="xmarts_sales_process_fields" model="ir.ui.view">
       <field name="name">xmarts_sales_process_fields</field>
