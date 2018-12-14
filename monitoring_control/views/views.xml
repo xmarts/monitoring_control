@@ -73,6 +73,12 @@
             </group>
           </page>
         </xpath>
+        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='product_uom_qty']" position="after">
+          <field name="peso_producto"/>
+        </xpath>
+        <xpath expr="//field[@name='amount_untaxed']" position="before">
+          <field name="peso_total"/>
+        </xpath>
       </field>
     </record>
 
@@ -154,6 +160,12 @@
               </tree>
             </field>
           </page>
+        </xpath>
+        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='order_line']/tree[1]/field[@name='product_qty']" position='after'>
+          <field name="peso_producto"/>
+        </xpath>
+        <xpath expr="//field[@name='amount_untaxed']" position='before'>
+          <field name="peso_total"/>
         </xpath>
       </field>
     </record>

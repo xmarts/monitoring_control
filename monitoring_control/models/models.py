@@ -3,6 +3,7 @@ from odoo import models, fields, api
 from datetime import datetime, date, time, timedelta
 import calendar
 
+
 class ResPartner(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
@@ -111,6 +112,15 @@ class SaleOrder(models.Model):
         ('delivered','Entregado')], string='Estado del transporte')
 
     request_sent_l = fields.Selection([('si','Si'),('no','No')],string="Solicitud a logistica enviada", readonly=False, default='no')
+    peso_total = fields.Float(string="Peso Total", default=0, compute="_compute_peso_producto_total")
+
+    @api.one
+    def _compute_peso_producto_total(self):
+        peso = 0
+        if self.order_line:
+            for p in self.order_line:
+                peso = peso + (p.product_id.weight * p.product_uom_qty)
+        self.peso_total = peso
 
     @api.onchange('partner_id')
     def onchange_cliente_partner(self):
@@ -189,7 +199,20 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     deadline = fields.Datetime(string='Fecha/Hora de entrega', related="order_id.deadline", readonly=True)
+    peso_producto = fields.Float(string="Peso", default=0, compute="_compute_peso_producto")
 
+    @api.one
+    def _compute_peso_producto(self):
+        self.peso_producto = self.product_id.weight * self.product_uom_qty
+
+class PurchaseOrderLine(models.Model):
+    _inherit = "purchase.order.line"
+    _name = "purchase.order.line"
+    peso_producto = fields.Float(string="Peso", default=0, compute="_compute_peso_producto")
+
+    @api.one
+    def _compute_peso_producto(self):
+        self.peso_producto = self.product_id.weight * self.product_qty
 
 class PurchaseProgramedOrder(models.Model):
     _name = "purchase.order.programing"
@@ -223,6 +246,15 @@ class PurchaseOrder(models.Model):
     ton_amount = fields.Monetary(string="Precio por tonelada")
     kg_amount = fields.Monetary(string="Precio por Kg", compute="_calcula_kg")
     product_programed = fields.One2many("purchase.order.programing", "purchase_id", string="Lista programada")
+    peso_total = fields.Float(string="Peso Total", default=0, compute="_compute_peso_producto_total")
+
+    @api.one
+    def _compute_peso_producto_total(self):
+        peso = 0
+        if self.order_line:
+            for p in self.order_line:
+                peso = peso + (p.product_id.weight * p.product_qty)
+        self.peso_total = peso
 
     @api.onchange('carrier_payment')
     def onchange_carrier_payment(self):
@@ -246,7 +278,7 @@ class MonitoringProducts(models.Model):
     monitoring_id = fields.Many2one("monitoring.control")
     product_id = fields.Many2one("product.product",string="Producto", readonly=True)
     fecha = fields.Datetime(string="Fecha prevista", readonly=True)
-    product_uom = fields.Many2one("product.uom", string="Unidad de medida", readonly=True)
+    product_uom = fields.Many2one("uom.uom", string="Unidad de medida", readonly=True)
     product_qty = fields.Float(string="Cantidad", readonly=True)
         
 
