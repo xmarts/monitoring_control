@@ -237,6 +237,7 @@
                   <group>
                     <field name="hora_llegada" />
                     <field name="hora_ingreso" />
+                    <field name="hora_salida" />
                     <field name="fecha_registro" invisible="1"/>
                     <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
                   </group>
