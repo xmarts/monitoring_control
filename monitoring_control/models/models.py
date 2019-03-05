@@ -10,6 +10,7 @@ class ResPartner(models.Model):
 
     no_validate_sale = fields.Boolean(string='Sin validación de venta')
     is_carrier = fields.Boolean(string='Es transportista')
+    ref_proveedor = fields.Char(string='Referencia proveedor')
 
     @api.onchange('supplier')
     def onchange_supplier_tr(self):
@@ -446,3 +447,8 @@ class MonitoringControl(models.Model):
         self.ensure_one()
         if self.state == 'aceptado' or self.state == 'rechazado':
             self.state = 'borrador'
+
+class AddRefProv(models.Model):
+    _inherit = 'product.template'
+
+    ref_proveedor = fields.Char(string='Referencia proveedor')
