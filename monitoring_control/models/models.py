@@ -452,3 +452,4 @@ class AddRefProv(models.Model):
     _inherit = 'product.template'
 
     ref_proveedor = fields.Char(string='Referencia proveedor')
+    ref_cliente = fields.Char(string='Referencia cliente')

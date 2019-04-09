@@ -19,6 +19,7 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='default_code']" position="after">
           <field name="ref_proveedor"/>
+          <field name="ref_cliente"/>
         </xpath>
       </field>
     </record>
