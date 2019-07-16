@@ -236,12 +236,15 @@
       <field name="arch" type="xml">
           <form>
               <header>
-                <button string='Aceptar' name="action_acept_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
-                <button string='Rechazar' name="action_refuse_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','borrador')]}" />
-                <button string='Cabiar a borrador' name="action_draft_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','=','borrador')]}" />
+                <button string='Aceptar' name="action_acept_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','ingreso')]}" />
+                <button string='Rechazar' name="action_refuse_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','ingreso')]}" />
+                <button string='Cabiar a Ingreso' name="action_draft_control" type="object" class="oe_highlight" attrs="{'invisible':[('state','=','ingreso')]}" />
+                <button string='Listo para Salir' name="action_salida_control" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','=','ingreso'),'|',('state','=','salir'),'|',('state','=','egreso'),'|',('state','=','rechazado')]}" />
+                  <button string='Egreso' name="action_egreso_control" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','=','ingreso'),'|',('state','=','egreso'),'|',('state','=','aprobado'),'|',('state','=','rechazado')]}" />
                 <field name="state" widget="statusbar"/>
               </header>
               <sheet string="Control de acceso">
+                <field name="image" widget="image" class="oe_avatar" />
                 <div class="oe_button_box" name="button_box">
                 </div>
                 <div class="oe_title">
@@ -255,18 +258,33 @@
                     <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
                     <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')]}"/>
                     <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
-                    <field name="carrier_id" domain="[('is_carrier','=',True)]"/>
+                    <field name="carrier_id" domain="[('is_carrier','=',True)]" attrs="{'invisible':[('tipo_reg','=','visitante')]}"/>
                   </group>
+                  
+                    
                   <group>
-                    <field name="hora_llegada" />
-                    <field name="hora_ingreso" />
+                    <field name="hora_llegada"/>
+                    <field name="hora_ingreso" invisible="1"/>
                     <field name="hora_salida" />
-                    <field name="fecha_registro" invisible="1"/>
-                    <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
+                    
+                    
+                   <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
                   </group>
                 </group>
                   <notebook>
-                      <page name="transporte" string="Datos del transporte">
+                    <page name="visitante" string="Datos del Visitante" attrs="{'invisible':['|',('tipo_reg','=','salida'),'|',('tipo_reg','=','entrada')]}">
+                        <group name="datos_visitante">
+                          <group>
+                          <field name="identificacion" />
+                          <field name="num_identificacion" />
+                        </group>
+                        <group>
+                          <field name="procedencia" />
+                          <field name="visita" />
+                        </group>
+                        </group>
+                      </page>
+                      <page name="transporte" string="Datos del transporte" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
                         <group name="datos_transporte">
                           <group>
                           <field name="tipo_trans" />
@@ -279,22 +297,22 @@
                         </group>
                       </page>
                       
-                      <page name="chofer" string="Datos del chofer" >
+                      <page name="chofer" string="Datos del chofer" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
                         <group name="datos_chofer">
                           <group>
-                            <field name="nombre_chofer" />
-                            <field name="tipo_licencia" />
-                            <field name="licencia" />
+                            <field name="nombre_chofer" attrs="{'required':[('tipo_reg','=','entrada'),('tipo_reg','=','salida')]}"/>
+                            <field name="tipo_licencia" attrs="{'required':[('tipo_reg','=','entrada'),('tipo_reg','=','salida')]}"/>
+                            <field name="licencia" attrs="{'required':[('tipo_reg','=','entrada'),('tipo_reg','=','salida')]}"/>
                           </group>
                           <group>
-                            <field name="origen" attrs="{'required':[('tipo_reg','=','salida')]}" />
-                            <field name="destino" attrs="{'required':[('tipo_reg','=','salida')]}" />
+                            <field name="origen"  />
+                            <field name="destino"/>
                             <field name="cedis" />
                           </group>
                         </group>
                       </page>
 
-                      <page string="Productos" attrs="{'invisible':[('tipo_reg','!=','entrada')]}">
+                      <page string="Productos" invisible="1">
                         <field name="product_programed">
                           <tree delete="false" create="false">
                             <field name="product_id" />
@@ -305,7 +323,7 @@
                         </field>
                       </page>
 
-                      <page string="Revisión">
+                      <page string="Revisión" invisible="1">
                         <group>
                           <field name="clean_unit" />
                           <field name="no_leaks" />
@@ -318,18 +336,8 @@
                         </group>
                       </page>
 
-                      <page string="Productos" attrs="{'invisible':[('tipo_reg','!=','salida')]}">
-                        <field name="sale_lines" >
-                          <tree>
-                            <field name="product_id" />
-                            <field name="product_uom_qty"/>
-                            <field name="product_uom" />
-                            <field name="deadline" />
-                          </tree>
-                        </field>
-                      </page>
 
-                      <page string="Control Calidad">
+                      <page string="Control Calidad" invisible="1">
                         <group>
                           <group>
                             <field name="humidity" />
@@ -347,6 +355,16 @@
                             <field name="plague" />
                           </group>
                         </group>
+                      </page>
+                      <page string="Aprobaciones" >
+                        <group>
+                            <field name="aprobo" />
+                          
+                            <field name="fecha_aprobacion"/>
+                          
+                        </group>
+                          
+                          
                       </page>
                   </notebook>
               </sheet>
@@ -378,6 +396,9 @@
     />
     <menuitem id="monitoring_control_root" name="Control Acceso"/>
     <menuitem id="monitoring_control_menu0" name="Control Acceso" sequence="0" parent="monitoring_control_root" action="action_monitoring_control"/>
+
+    <menuitem id="all_picking" name="Transfers" parent="monitoring_control_root" sequence="5" action="stock.action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
 
 
     <record    id="view_form_addition_products" model="ir.ui.view">
@@ -428,6 +449,7 @@
     <menuitem id="addition_products_menu0" name="Aditamentos" sequence="67" parent="sale.menu_sale_config" action="action_addition_products"/>
     <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu1" parent="stock.menu_warehouse_config" sequence="67"/>
     <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu2" parent="purchase.menu_product_in_config_purchase" sequence="67"/>
+
 
 
 

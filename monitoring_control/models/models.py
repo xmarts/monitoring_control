@@ -300,22 +300,47 @@ class MonitoringControl(models.Model):
         else:
             self.name = 'DOC'+str(self.id)
 
-    state = fields.Selection([('borrador', 'Borrador'),('aceptado', 'Aceptado'),('rechazado', 'Rechazado')],default='borrador', string="Estado")
+    state = fields.Selection([('ingreso', 'Ingreso'),('aprobado', 'Aprobado'),('salir', 'Por salir'),('egreso', 'Egreso'),('rechazado','Rechazado')],default='ingreso', string="Estado")
     name = fields.Char(string="N° de documento", compute=_document_id)
-    tipo_reg = fields.Selection((('entrada','Entrada'),('salida','Salida')),string="Tipo de registro", required=True)
+    tipo_reg = fields.Selection((('entrada','Entrada'),('salida','Salida'),('visitante','Visitante')),string="Tipo de registro", required=True)
     hora_llegada = fields.Datetime(string="Fecha y hora de llegada", default=fields.Datetime.now, required=True)
     hora_ingreso = fields.Datetime(string="Fecha y hora de ingreso", default=fields.Datetime.now, required=True)
     hora_salida = fields.Datetime(string="Fecha y hora de salida", default=fields.Datetime.now)
-    nombre_chofer = fields.Char(string="Nombre del chofer", required=True)
+    nombre_chofer = fields.Char(string="Nombre del chofer")
     tipo_trans = fields.Selection((('1ton','1 Tonelada'),('3ton','3 Toneladas'),('5ton','5 Toneladas'),('10ton','10 Toneladas'),('torton','Torton'),('48pi','48 Pies'),('53pi','53 Pies'),('full','Full'),('c20','Contenedor 20'),('c40','Contenedor 40'),('c48','Contenedor 48'),('c53','Contenedor 53')),string="Tipo de transporte")
     placas_tractor = fields.Char(string="Placas del tractor")
     placas_caja = fields.Char(string="Placas de la caja")
     placas_caja_dos = fields.Char(string="Placas de la caja 2")
 
+    #cambios
+    aprobo = fields.Many2one(
+         'hr.employee',
+         string='Quien Aprobo'
+     )
+    fecha_aprobacion = fields.Date(
+          string='Fecha'
+      ) 
+    image = fields.Binary(
+       
+        help="Este campo contiene la imagen utilizada como foto para el empleado, limitada a 1024x1024px.")
+    identificacion = fields.Char(
+        string='Identificacion',
+    )
+    num_identificacion = fields.Char(
+        string='Numero de Identificacion',
+    )
+    procedencia = fields.Char(
+        string='Procedencia',
+    )
+    visita =  fields.Many2one(
+         'hr.employee',
+        string='A quien visita',
+    )
+    #
     #proveedor_linea = fields.Char(string="Proveedor y linea de transporte")
 
-    tipo_licencia = fields.Selection((('autom','Automovilista'),('chofer','Chofer'),('federal','Federal')), string="Tipo de licencia", required=True)
-    licencia = fields.Char(string="N° de licencia", required=True)
+    tipo_licencia = fields.Selection((('autom','Automovilista'),('chofer','Chofer'),('federal','Federal')), string="Tipo de licencia")
+    licencia = fields.Char(string="N° de licencia")
     origen = fields.Char(string="Origen")
     destino = fields.Char(string="Destino")
     cedis = fields.Char(string="Cedis")
@@ -433,20 +458,30 @@ class MonitoringControl(models.Model):
         if self.tipo_reg == 'entrada':
             self.sale_id = ''
 
+    def action_salida_control(self):
+        self.ensure_one()
+        if self.state == 'aprobado':
+            self.state = 'salir'
+
+    def action_egreso_control(self):
+        self.ensure_one()
+        if self.state == 'salir':
+            self.state = 'egreso'
+
     def action_acept_control(self):
         self.ensure_one()
-        if self.state == 'borrador':
-            self.state = 'aceptado'
+        if self.state == 'ingreso':
+            self.state = 'aprobado'
 
     def action_refuse_control(self):
         self.ensure_one()
-        if self.state == 'borrador':
+        if self.state == 'ingreso':
             self.state = 'rechazado'
 
     def action_draft_control(self):
         self.ensure_one()
-        if self.state == 'aceptado' or self.state == 'rechazado':
-            self.state = 'borrador'
+        if self.state == 'aprobado' or self.state == 'salir' or self.state == 'egreso' or self.state == 'rechazado':
+            self.state = 'ingreso'
 
 class AddRefProv(models.Model):
     _inherit = 'product.template'
