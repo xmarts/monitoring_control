@@ -313,6 +313,9 @@ class MonitoringControl(models.Model):
     placas_caja_dos = fields.Char(string="Placas de la caja 2")
 
     #cambios
+    nombre = fields.Char(
+        string='Nombre',
+    )
     aprobo = fields.Many2one(
          'hr.employee',
          string='Quien Aprobo'

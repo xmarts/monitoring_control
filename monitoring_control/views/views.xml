@@ -275,6 +275,7 @@
                     <page name="visitante" string="Datos del Visitante" attrs="{'invisible':['|',('tipo_reg','=','salida'),'|',('tipo_reg','=','entrada')]}">
                         <group name="datos_visitante">
                           <group>
+                          <field name="nombre"/>
                           <field name="identificacion" />
                           <field name="num_identificacion" />
                         </group>
@@ -397,7 +398,7 @@
     <menuitem id="monitoring_control_root" name="Control Acceso"/>
     <menuitem id="monitoring_control_menu0" name="Control Acceso" sequence="0" parent="monitoring_control_root" action="action_monitoring_control"/>
 
-    <menuitem id="all_picking" name="Transfers" parent="monitoring_control_root" sequence="5" action="stock.action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>
+    <menuitem id="all_picking" name="Recepciones" parent="monitoring_control_root" sequence="5" action="stock.action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>
 
 
 
