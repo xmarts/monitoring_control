@@ -4,10 +4,7 @@ access_monitoring_control,monitoring.control,model_monitoring_control,base.group
 access_monitoring_control,monitoring.control,model_monitoring_control,base.group_erp_manager,1,1,1,1
 
 access_purchase_order_programing,purchase.order.programing,model_purchase_order_programing,base.group_user,1,0,0,0
-access_purchase_order_programing,purchase.order.programing,model_purchase_order_programing,base.group_erp_manager,1,1,1,1
-
-access_probrema,probrema,model_probrema,base.group_user,1,0,0,0
-access_probrema,probrema,model_probrema,base.group_erp_manager,1,1,1,1
+access_purchase_order_programing,purchase.order.programing,model_purchase_order_programing,base.group_erp_manager,1,1,1,11
 
 access_monitoring_motivos,monitoring.motivos,model_monitoring_motivos,base.group_user,1,0,0,0
 access_monitoring_motivos,monitoring.motivos,model_monitoring_motivos,base.group_erp_manager,1,1,1,1
