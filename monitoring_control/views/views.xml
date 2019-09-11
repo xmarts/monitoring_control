@@ -265,7 +265,7 @@
                   <group>
                     <field name="hora_llegada"/>
                     <field name="hora_ingreso" invisible="1"/>
-                    <field name="hora_salida" />
+                    <field name="hora_salida"  attrs="{'invisible':[('state','!=','egreso')]}"/>
                     
                     
                    <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
@@ -308,7 +308,7 @@
                           <group>
                             <field name="origen"  />
                             <field name="destino"/>
-                            <field name="cedis" />
+                            <field name="cedis" invisible="1" />
                           </group>
                         </group>
                       </page>
@@ -357,7 +357,7 @@
                           </group>
                         </group>
                       </page>
-                      <page string="Aprobaciones" >
+                      <!--<page string="Aprobaciones" >
                         <group>
                             <field name="aprobo" />
                           
@@ -366,7 +366,7 @@
                         </group>
                           
                           
-                      </page>
+                      </page>-->
                   </notebook>
               </sheet>
               <div class="oe_chatter">
@@ -396,9 +396,9 @@
         view_mode="tree,form"
     />
     <menuitem id="monitoring_control_root" name="Control Acceso"/>
-    <menuitem id="monitoring_control_menu0" name="Control Acceso" sequence="0" parent="monitoring_control_root" action="action_monitoring_control"/>
+    <!--<menuitem id="monitoring_control_menu0" name="Control Acceso" sequence="0" parent="monitoring_control_root" action="action_monitoring_control"/>
 
-    <menuitem id="all_picking" name="Recepciones" parent="monitoring_control_root" sequence="5" action="stock.action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>
+    <menuitem id="all_picking" name="Recepciones" parent="monitoring_control_root" sequence="5" action="stock.action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>-->
 
 
 
