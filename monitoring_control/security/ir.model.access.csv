@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
 access_monitoring_control,monitoring.control,model_monitoring_control,base.group_user,1,0,0,0
 access_monitoring_control,monitoring.control,model_monitoring_control,base.group_erp_manager,1,1,1,1
 
@@ -7,3 +8,11 @@ access_purchase_order_programing,purchase.order.programing,model_purchase_order_
 
 access_probrema,probrema,model_probrema,base.group_user,1,0,0,0
 access_probrema,probrema,model_probrema,base.group_erp_manager,1,1,1,1
+
+access_monitoring_motivos,monitoring.motivos,model_monitoring_motivos,base.group_user,1,0,0,0
+access_monitoring_motivos,monitoring.motivos,model_monitoring_motivos,base.group_erp_manager,1,1,1,1
+
+access_monitoring_products,monitoring.products,model_monitoring_products,base.group_user,1,0,0,0
+access_monitoring_products,monitoring.products,model_monitoring_products,base.group_erp_manager,1,1,1,1
+
+access_sales_route,sales.route,model_sales_route,base.group_user,1,0,0,0
