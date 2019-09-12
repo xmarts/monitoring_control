@@ -255,6 +255,8 @@
                 <group>
                   <group>
                     <field name="tipo_reg" />
+                    <field name="cliente_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}" />
+                    <field name="proveedor_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}"/>
                     <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
                     <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')]}"/>
                     <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
@@ -285,7 +287,7 @@
                         </group>
                         <group>
                           <field name="procedencia"  attrs="{'required':[('tipo_reg','=','visitante')]}"/>
-                          <field name="visita"  attrs="{'required':[('tipo_reg','=','visitante')]}" />
+                          <field name="visita"   attrs="{'required':[('tipo_reg','=','visitante')]}" />
                         </group>
                         </group>
                       </page>
