@@ -312,10 +312,14 @@ class MonitoringControl(models.Model):
     placas_caja = fields.Char(string="Placas de la caja")
     placas_caja_dos = fields.Char(string="Placas de la caja 2")
 
+    #camibios l
+    cliente_c  = fields.Boolean(string='Cliente')
+    proveedor_c = fields.Boolean(string='Proveedor')
+
+    nombre = fields.Many2one('res.partner',string='Nombre',domain="[('customer','=',True)]" )
+    nombre_p = fields.Many2one('res.partner',string='Nombre',domain="[('supplier','=',True)]" )
     #cambios
-    nombre = fields.Char(
-        string='Nombre',
-    )
+   
     aprobo = fields.Many2one(
          'hr.employee',
          string='Quien Aprobo'
@@ -485,6 +489,14 @@ class MonitoringControl(models.Model):
         self.ensure_one()
         if self.state == 'aprobado' or self.state == 'salir' or self.state == 'egreso' or self.state == 'rechazado':
             self.state = 'ingreso'
+            
+    #cambios l        
+    @api.onchange('cliente_c','proveedor_c')
+    def chec(self):
+        if self.cliente_c== True:
+            self.proveedor_c =False
+        else:
+            self.cliente_c =False               
 
 class AddRefProv(models.Model):
     _inherit = 'product.template'

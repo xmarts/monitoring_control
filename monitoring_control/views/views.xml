@@ -275,13 +275,17 @@
                     <page name="visitante" string="Datos del Visitante" attrs="{'invisible':['|',('tipo_reg','=','salida'),'|',('tipo_reg','=','entrada')]}">
                         <group name="datos_visitante">
                           <group>
-                          <field name="nombre"/>
-                          <field name="identificacion" />
-                          <field name="num_identificacion" />
+
+                          <field name="nombre" attrs="{'invisible':[('cliente_c','!=',True)], 'required':[('cliente_c','=',True)]}" />
+
+                          <field name="nombre_p" attrs="{'invisible':[('proveedor_c','!=',True)], 'required':[('proveedor_c','=',True)]}" />
+
+                          <field name="identificacion"  attrs="{'required':[('tipo_reg','=','visitante')]}" />
+                          <field name="num_identificacion"  attrs="{'required':[('tipo_reg','=','visitante')]}"/>
                         </group>
                         <group>
-                          <field name="procedencia" />
-                          <field name="visita" />
+                          <field name="procedencia"  attrs="{'required':[('tipo_reg','=','visitante')]}"/>
+                          <field name="visita"  attrs="{'required':[('tipo_reg','=','visitante')]}" />
                         </group>
                         </group>
                       </page>
