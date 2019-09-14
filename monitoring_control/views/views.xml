@@ -257,8 +257,9 @@
                     <field name="tipo_reg" />
                     <field name="cliente_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}" />
                     <field name="proveedor_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}"/>
-                    <field name="purchase_id" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
-                    <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')]}"/>
+                    <field name="purchase_id"  attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('check_red','!=',False)]}"/>
+                    <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')],'readonly':[('check_red','!=',False)]}"/>
+
                     <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
                     <field name="carrier_id" domain="[('is_carrier','=',True)]" attrs="{'invisible':[('tipo_reg','=','visitante')]}"/>
                   </group>
@@ -268,7 +269,7 @@
                     <field name="hora_llegada"/>
                     <field name="hora_ingreso" invisible="1"/>
                     <field name="hora_salida"  attrs="{'invisible':[('state','!=','egreso')]}"/>
-                    
+                    <field name="check_red"/>
                     
                    <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
                   </group>
@@ -294,8 +295,8 @@
                       <page name="transporte" string="Datos del transporte" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
                         <group name="datos_transporte">
                           <group>
-                          <field name="tipo_trans" />
-                          <field name="placas_tractor" />
+                          <field name="tipo_trans"  attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
+                          <field name="placas_tractor"  attrs="{'required':[('tipo_reg','!=','visitante')]}" />
                         </group>
                         <group>
                           <field name="placas_caja" />
@@ -362,6 +363,17 @@
                             <field name="plague" />
                           </group>
                         </group>
+                      </page>
+
+                        <page string="Productos" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
+                          <sheet>
+                            <field name="tabla_entrada" attrs="{'readonly':[('check_red','!=',False)]}">
+                              <tree string="Productos" editable="bottom">
+                                <field name="produto_t"/>
+                                <field name="Cantidad"/>
+                              </tree>
+                            </field>
+                        </sheet>
                       </page>
                       <!--<page string="Aprobaciones" >
                         <group>
@@ -456,6 +468,20 @@
     <menuitem id="addition_products_menu0" name="Aditamentos" sequence="67" parent="sale.menu_sale_config" action="action_addition_products"/>
     <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu1" parent="stock.menu_warehouse_config" sequence="67"/>
     <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu2" parent="purchase.menu_product_in_config_purchase" sequence="67"/>
+
+
+    
+    <record id="add_button_crete" model="ir.ui.view">
+      <field name="name">add.button.crete</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.view_picking_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='action_cancel']" position="after">
+          <button name="doc_entrada" string="Crear doc.Entrada" type="object" attrs="{'invisible':[('picking_type_code','=','outgoing')]}"/>
+          <button name="doc_salida"  string="Crear doc.Salida" type="object" attrs="{'invisible':[('picking_type_code','=','incoming')]}"/>
+        </xpath>
+      </field>
+    </record>
 
 
 

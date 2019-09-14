@@ -315,9 +315,11 @@ class MonitoringControl(models.Model):
     #camibios l
     cliente_c  = fields.Boolean(string='Cliente')
     proveedor_c = fields.Boolean(string='Proveedor')
-
     nombre = fields.Many2one('res.partner',string='Nombre',domain="[('customer','=',True)]" )
     nombre_p = fields.Many2one('res.partner',string='Nombre',domain="[('supplier','=',True)]" )
+    #tabla
+    check_red = fields.Boolean( string='campos Rendoly')
+    tabla_entrada = fields.One2many('tabla.entrada', 'relacion')
     #cambios
    
     aprobo = fields.Many2one(
@@ -503,3 +505,62 @@ class AddRefProv(models.Model):
 
     ref_proveedor = fields.Char(string='Referencia proveedor')
     ref_cliente = fields.Char(string='Referencia cliente')
+
+#cambios l
+
+class tabla_e(models.Model):
+    _name = 'tabla.entrada'
+
+    relacion = fields.Many2one('monitoring.control', ondelete="cascade")
+    produto_t =fields.Many2one('product.product',string="producto")
+    Cantidad = fields.Char(string="Cantidad")
+
+
+class validate_entrad(models.Model):
+    _inherit = 'stock.picking'
+
+
+    @api.one
+    def doc_entrada(self):
+        if self.picking_type_code=='incoming':
+            bus = self.env['purchase.order'].search([('name','=',self.origin)],limit=1)
+            project_obj = self.env['monitoring.control']
+            project_values = {
+                'tipo_reg':'entrada',
+                'purchase_id':bus.id,
+                'check_red':True,
+                } 
+            project_id = project_obj.create(project_values)
+
+            if project_id:
+                entrada_obj = self.env['tabla.entrada']
+                for line in self.move_ids_without_package:
+                    entrada_values={
+                        'relacion':project_id.id,
+                        'produto_t':line.product_id.id,
+                        'Cantidad':line.product_uom_qty,
+                        }
+                    entrada_id = entrada_obj.create(entrada_values)      
+
+
+    @api.one
+    def doc_salida(self):
+        if self.picking_type_code=='outgoing':
+            sal = self.env['sale.order'].search([('name','=',self.origin)],limit=1)
+            project_obj = self.env['monitoring.control']
+            project_values = {
+                'tipo_reg':'salida',
+                'sale_id':sal.id,
+                'check_red':True,
+                } 
+            project_id = project_obj.create(project_values)
+
+            if project_id:
+                entrada_obj = self.env['tabla.entrada']
+                for line in self.move_ids_without_package:
+                   entrada_values={
+                        'relacion':project_id.id,
+                        'produto_t':line.product_id.id,
+                        'Cantidad':line.product_uom_qty,
+                        }
+                   entrada_id = entrada_obj.create(entrada_values)     
