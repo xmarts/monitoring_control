@@ -254,7 +254,7 @@
                 </div>
                 <group>
                   <group>
-                    <field name="tipo_reg" />
+                    <field name="tipo_reg"  readonly="1"/>
                     <field name="cliente_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}" />
                     <field name="proveedor_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}"/>
                     <field name="purchase_id"  attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('check_red','!=',False)]}"/>
@@ -269,7 +269,7 @@
                     <field name="hora_llegada"/>
                     <field name="hora_ingreso" invisible="1"/>
                     <field name="hora_salida"  attrs="{'invisible':[('state','!=','egreso')]}"/>
-                    <field name="check_red"/>
+                    <field name="check_red" invisible="1"/>
                     
                    <field name="motivo_rechazo" attrs="{'invisible':[('state','!=','rechazado')]}" />
                   </group>
@@ -308,9 +308,9 @@
                       <page name="chofer" string="Datos del chofer" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
                         <group name="datos_chofer">
                           <group>
-                            <field name="nombre_chofer" attrs="{'required':[('tipo_reg','=','entrada'),('tipo_reg','=','salida')]}"/>
-                            <field name="tipo_licencia" attrs="{'required':[('tipo_reg','=','entrada'),('tipo_reg','=','salida')]}"/>
-                            <field name="licencia" attrs="{'required':[('tipo_reg','=','entrada'),('tipo_reg','=','salida')]}"/>
+                            <field name="nombre_chofer" attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
+                            <field name="tipo_licencia" attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
+                            <field name="licencia" attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
                           </group>
                           <group>
                             <field name="origen"  />
@@ -398,7 +398,7 @@
         <field name="arch" type="xml">
             <tree >
                 <field name="name" />
-                <field name="tipo_reg" />
+                <field name="tipo_reg"  />
                 <field name="purchase_id" />
                 <field name="sale_id" />
                 <field name="hora_llegada" />
@@ -470,7 +470,7 @@
     <menuitem action="action_addition_products" name="Aditamentos" id="addition_products_menu2" parent="purchase.menu_product_in_config_purchase" sequence="67"/>
 
 
-    
+
     <record id="add_button_crete" model="ir.ui.view">
       <field name="name">add.button.crete</field>
       <field name="model">stock.picking</field>
