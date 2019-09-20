@@ -292,6 +292,16 @@
                         </group>
                         </group>
                       </page>
+                        <page string="Productos" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
+                          <sheet>
+                            <field name="tabla_entrada" attrs="{'readonly':[('check_red','!=',False)]}">
+                              <tree string="Productos" editable="bottom">
+                                <field name="produto_t"/>
+                                <field name="Cantidad"/>
+                              </tree>
+                            </field>
+                        </sheet>
+                      </page>
                       <page name="transporte" string="Datos del transporte" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
                         <group name="datos_transporte">
                           <group>
@@ -363,17 +373,6 @@
                             <field name="plague" />
                           </group>
                         </group>
-                      </page>
-
-                        <page string="Productos" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
-                          <sheet>
-                            <field name="tabla_entrada" attrs="{'readonly':[('check_red','!=',False)]}">
-                              <tree string="Productos" editable="bottom">
-                                <field name="produto_t"/>
-                                <field name="Cantidad"/>
-                              </tree>
-                            </field>
-                        </sheet>
                       </page>
                       <!--<page string="Aprobaciones" >
                         <group>
