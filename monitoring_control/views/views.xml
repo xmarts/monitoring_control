@@ -292,6 +292,7 @@
                         </group>
                         </group>
                       </page>
+
                         <page string="Productos" attrs="{'invisible':[('tipo_reg','=','visitante')]}">
                           <sheet>
                             <field name="tabla_entrada" attrs="{'readonly':[('check_red','!=',False)]}">
