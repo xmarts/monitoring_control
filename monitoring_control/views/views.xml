@@ -259,7 +259,7 @@
                     <field name="proveedor_c" attrs="{'invisible':[('tipo_reg','!=','visitante')]}"/>
                     <field name="purchase_id"  attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')], 'readonly':[('check_red','!=',False)]}"/>
                     <field name="sale_id" attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')],'readonly':[('check_red','!=',False)]}"/>
-
+                    <field name="name_cliente"  attrs="{'invisible':[('tipo_reg','!=','salida')], 'required':[('tipo_reg','=','salida')],'readonly':[('check_red','!=',False)]}"/>
                     <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
                     <field name="carrier_id" domain="[('is_carrier','=',True)]" attrs="{'invisible':[('tipo_reg','=','visitante')]}"/>
                   </group>
@@ -299,6 +299,7 @@
                               <tree string="Productos" editable="bottom">
                                 <field name="produto_t"/>
                                 <field name="Cantidad"/>
+                                <field name="cantidad_real"/>
                               </tree>
                             </field>
                         </sheet>

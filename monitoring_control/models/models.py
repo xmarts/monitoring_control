@@ -317,6 +317,7 @@ class MonitoringControl(models.Model):
     proveedor_c = fields.Boolean(string='Proveedor')
     nombre = fields.Many2one('res.partner',string='Nombre',domain="[('customer','=',True)]" )
     nombre_p = fields.Many2one('res.partner',string='Nombre',domain="[('supplier','=',True)]" )
+    name_cliente = fields.Char(string="Cliente")
     #tabla
     check_red = fields.Boolean( string='campos Rendoly')
     tabla_entrada = fields.One2many('tabla.entrada', 'relacion')
@@ -514,6 +515,7 @@ class tabla_e(models.Model):
     relacion = fields.Many2one('monitoring.control', ondelete="cascade")
     produto_t =fields.Many2one('product.product',string="producto")
     Cantidad = fields.Char(string="Cantidad")
+    cantidad_real = fields.Char(string="Cantidad real")
 
 
 class validate_entrad(models.Model):
@@ -552,6 +554,7 @@ class validate_entrad(models.Model):
                 'tipo_reg':'salida',
                 'sale_id':sal.id,
                 'check_red':True,
+                'name_cliente':sal.partner_id.name,
                 } 
             project_id = project_obj.create(project_values)
 
