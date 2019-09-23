@@ -321,6 +321,10 @@ class MonitoringControl(models.Model):
     #tabla
     check_red = fields.Boolean( string='campos Rendoly')
     tabla_entrada = fields.One2many('tabla.entrada', 'relacion')
+    #
+    campo_notas = fields.Char(string="Notas")
+    campo_proveedor= fields.Char(string="Proveedor")
+    campo_articulo = fields.Char(string="Articulo")
     #cambios
    
     aprobo = fields.Many2one(
