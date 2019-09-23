@@ -522,7 +522,7 @@ class validate_entrad(models.Model):
     _inherit = 'stock.picking'
 
 
-    @api.one
+    @api.multi
     def doc_entrada(self):
         if self.picking_type_code=='incoming':
             bus = self.env['purchase.order'].search([('name','=',self.origin)],limit=1)
@@ -542,10 +542,20 @@ class validate_entrad(models.Model):
                         'produto_t':line.product_id.id,
                         'Cantidad':line.product_uom_qty,
                         }
-                    entrada_id = entrada_obj.create(entrada_values)      
+                    entrada_id = entrada_obj.create(entrada_values) 
+            return{
+            'type':'ir.actions.act_window',
+            'res_model':'monitoring.control',
+            'view_mode':'form',
+            'res_id':project_id.id,
+            'target':'current',
+            'flags':{'form':{'action_buttons': True,'options':{'mode':'edit'}}}
 
 
-    @api.one
+            }          
+
+
+    @api.multi
     def doc_salida(self):
         if self.picking_type_code=='outgoing':
             sal = self.env['sale.order'].search([('name','=',self.origin)],limit=1)
@@ -559,11 +569,22 @@ class validate_entrad(models.Model):
             project_id = project_obj.create(project_values)
 
             if project_id:
-                entrada_obj = self.env['tabla.entrada']
+                salidad_obj = self.env['tabla.entrada']
                 for line in self.move_ids_without_package:
-                   entrada_values={
+                    salida_values={
                         'relacion':project_id.id,
                         'produto_t':line.product_id.id,
                         'Cantidad':line.product_uom_qty,
                         }
-                   entrada_id = entrada_obj.create(entrada_values)     
+                    salida_id = salidad_obj.create(salida_values)
+            return{
+                'type':'ir.actions.act_window',
+                'res_model':'monitoring.control',
+                'view_mode':'form',
+                'res_id':project_id.id,
+                'target':'current',
+                'flags':{'form':{'action_buttons': True,'options':{'mode':'edit'}}}
+
+
+                }
+          
