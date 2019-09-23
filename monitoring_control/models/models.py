@@ -302,7 +302,7 @@ class MonitoringControl(models.Model):
 
     state = fields.Selection([('ingreso', 'Ingreso'),('aprobado', 'Aprobado'),('salir', 'Por salir'),('egreso', 'Egreso'),('rechazado','Rechazado')],default='ingreso', string="Estado")
     name = fields.Char(string="N° de documento", compute=_document_id)
-    tipo_reg = fields.Selection((('entrada','Entrada'),('salida','Salida'),('visitante','Visitante')),string="Tipo de registro", required=True)
+    tipo_reg = fields.Selection((('entrada','Entrada'),('salida','Salida'),('visitante','Visitante'),('otros_sa','Otros salida'),('otros_en','Otros Entrada')),string="Tipo de registro", required=True)
     hora_llegada = fields.Datetime(string="Fecha y hora de llegada", default=fields.Datetime.now, required=True)
     hora_ingreso = fields.Datetime(string="Fecha y hora de ingreso", default=fields.Datetime.now, required=True)
     hora_salida = fields.Datetime(string="Fecha y hora de salida", default=fields.Datetime.now)
