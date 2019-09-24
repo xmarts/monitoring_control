@@ -314,9 +314,9 @@
                       <page name="transporte" string="Datos del transporte" attrs="{'invisible':['|',('tipo_reg','=','visitante'),'|',('tipo_reg', '=','otros_en'),'|',('tipo_reg','=','otros_sa')]}">
                         <group name="datos_transporte">
                           <group>
-                          <field name="tipo_trans" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
+                          <field name="tipo_trans" attrs="{'required':['|',('tipo_reg','=','entrada'),('tipo_reg', '=','salida')]}"/>
 
-                          <field name="placas_tractor"  attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
+                          <field name="placas_tractor"  attrs="{'required':['|',('tipo_reg','=','entrada'),('tipo_reg', '=','salida')]}"/>
                         </group>
                         <group>
                           <field name="placas_caja" />
@@ -328,9 +328,9 @@
                       <page name="chofer" string="Datos del chofer" attrs="{'invisible':['|',('tipo_reg','=','visitante'),'|',('tipo_reg', '=','otros_en'),'|',('tipo_reg','=','otros_sa')]}">
                         <group name="datos_chofer">
                           <group>
-                            <field name="nombre_chofer" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
-                            <field name="tipo_licencia" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
-                            <field name="licencia" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
+                            <field name="nombre_chofer" attrs="{'required':['|',('tipo_reg','=','entrada'),('tipo_reg', '=','salida')]}"/>
+                            <field name="tipo_licencia" attrs="{'required':['|',('tipo_reg','=','entrada'),('tipo_reg', '=','salida')]}"/>
+                            <field name="licencia" attrs="{'required':['|',('tipo_reg','=','entrada'),('tipo_reg', '=','salida')]}"/>
                           </group>
                           <group>
                             <field name="origen"  />
