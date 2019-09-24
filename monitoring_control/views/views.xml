@@ -263,15 +263,16 @@
                     <field name="provider_id" domain="[('supplier','=',True)]" attrs="{'invisible':[('tipo_reg','!=','entrada')], 'required':[('tipo_reg','=','entrada')]}" />
                     <field name="carrier_id" domain="[('is_carrier','=',True)]" attrs="{'invisible':[('tipo_reg','=','visitante')]}"/>
 
-                     <field name="campo_notas" attrs="{'invisible':['|',('tipo_reg','=','entrada'),'|',('tipo_reg','=','salida'),'|',('tipo_reg','=','visitante')]}"/>
+                    <field name="campo_notas" attrs="{'invisible':['|',('tipo_reg','=','entrada'),'|',('tipo_reg','=','salida'),'|',('tipo_reg','=','visitante')]}"/>
                     <field name="campo_proveedor" attrs="{'invisible':['|',('tipo_reg','=','entrada'),'|',('tipo_reg','=','salida'),'|',('tipo_reg','=','visitante')]}"/>
 
-
                   </group>
-                  s
+                  
                     
                   <group>
+
                     <field name="campo_articulo" attrs="{'invisible':['|',('tipo_reg','=','entrada'),'|',('tipo_reg','=','salida'),'|',('tipo_reg','=','visitante')]}"/>
+
                     <field name="hora_llegada"/>
                     <field name="hora_ingreso" invisible="1"/>
                     <field name="hora_salida"  attrs="{'invisible':[('state','!=','egreso')]}"/>
@@ -313,8 +314,9 @@
                       <page name="transporte" string="Datos del transporte" attrs="{'invisible':['|',('tipo_reg','=','visitante'),'|',('tipo_reg', '=','otros_en'),'|',('tipo_reg','=','otros_sa')]}">
                         <group name="datos_transporte">
                           <group>
-                          <field name="tipo_trans"  attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
-                          <field name="placas_tractor"  attrs="{'required':[('tipo_reg','!=','visitante')]}" />
+                          <field name="tipo_trans" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
+
+                          <field name="placas_tractor"  attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
                         </group>
                         <group>
                           <field name="placas_caja" />
@@ -326,9 +328,9 @@
                       <page name="chofer" string="Datos del chofer" attrs="{'invisible':['|',('tipo_reg','=','visitante'),'|',('tipo_reg', '=','otros_en'),'|',('tipo_reg','=','otros_sa')]}">
                         <group name="datos_chofer">
                           <group>
-                            <field name="nombre_chofer" attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
-                            <field name="tipo_licencia" attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
-                            <field name="licencia" attrs="{'required':[('tipo_reg','!=','visitante')]}"/>
+                            <field name="nombre_chofer" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
+                            <field name="tipo_licencia" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
+                            <field name="licencia" attrs="{'required':[('tipo_reg','=','entrada')],'required':[('tipo_reg','=','salida')]}"/>
                           </group>
                           <group>
                             <field name="origen"  />
@@ -489,9 +491,6 @@
         </xpath>
       </field>
     </record>
-
-
-
 
   </data>
 </odoo>
