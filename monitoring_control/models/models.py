@@ -321,6 +321,7 @@ class MonitoringControl(models.Model):
     #tabla
     check_red = fields.Boolean( string='campos Rendoly')
     tabla_entrada = fields.One2many('tabla.entrada', 'relacion')
+    tabla_otros = fields.One2many('tabla.otros','relacion2')
     #
     campo_notas = fields.Char(string="Notas")
     campo_proveedor= fields.Char(string="Proveedor")
@@ -512,6 +513,13 @@ class AddRefProv(models.Model):
     ref_cliente = fields.Char(string='Referencia cliente')
 
 #cambios l
+
+class tabla_otros(models.Model):
+    _name = 'tabla.otros'
+
+    producto_otros = fields.Char(string="Producto")
+    cantidad  =  fields.Char(string="Cantidad")
+    relacion2 = fields.Many2one('monitoring.control',ondelete="cascade")
 
 class tabla_e(models.Model):
     _name = 'tabla.entrada'

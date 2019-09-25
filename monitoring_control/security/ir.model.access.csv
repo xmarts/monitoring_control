@@ -18,3 +18,6 @@ access_sales_route,sales.route,model_sales_route,base.group_user,1,0,0,0
 access_tabla_entrada,tabla.entrada,model_tabla_entrada,base.group_user,1,0,0,0
 access_tabla_entrada,tabla.entrada,model_tabla_entrada,base.group_erp_manager,1,1,1,1
 
+access_tabla_otros,tabla.otros,model_tabla_otros,base.group_user,1,0,0,0
+access_tabla_otros,tabla.otros,model_tabla_otros,base.group_erp_manager,1,1,1,1
+
